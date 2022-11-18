@@ -1,0 +1,10 @@
+namespace: dev
+
+resources:
+- ns.yaml
+- mongo-operator-crds.yaml
+- mongo-operator-rbac.yaml
+- mongo-operator.yaml
+
+patchesStrategicMerge:
+- mongo-operator-patch.yaml

@@ -14,11 +14,15 @@ spec:
       labels:
         app: coact-api
     spec:
+      securityContext:
+        runAsUser: 7017
+        runAsGroup: 1051
+        fsGroup: 1051
       containers:
       - name: coact
         image: slaclab/coact:latest
-        # command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--reload" ]
-        command: [ "bash", "-c", "sleep infinity" ]
+        command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--reload" ]
+        # command: [ "bash", "-c", "sleep infinity" ]
         env:
         - name: ADMIN_USERNAMES
           value: ytl, mshankar
@@ -42,11 +46,16 @@ spec:
           value: x-vouch-user
         ports:
         - containerPort: 8000
-        volumeMounts:
-        - name: code
-          mountPath: /app/
+#        volumeMounts:
+#        # - name: code
+#        #   mountPath: /app/
+#        - name: sdf-home
+#          mountPath: /app/
+#          subPath: y/ytl/k8s/coact/coact-api/
       volumes:
-      - name: code
-        persistentVolumeClaim:
-          claimName: coact-api-code
-
+      # - name: code
+      #   persistentVolumeClaim:
+      #     claimName: coact-api-code
+#      - name: sdf-home
+#        persistentVolumeClaim:
+#          claimName: sdf-home

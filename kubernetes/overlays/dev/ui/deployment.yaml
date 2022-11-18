@@ -14,25 +14,78 @@ spec:
       labels:
         app: coact-ui
     spec:
+      securityContext:
+        # runAsUser: 7017
+        # runAsGroup: 1051
+        fsGroup: 1051
+      # initContainers:
+      # - name: init
+      #   image: bhgedigital/envsubst
+      #   command:
+      #   - sh
+      #   - -c
+      #   - envsubst < /in/passwd > /out/passwd 
+      #   env:
+      #   - name: USERNAME
+      #     value: ytl
+      #   - name: UID
+      #     value: "7017"
+      #   - name: GID
+      #     value: "1051"
+      #   - name: HOMEDIR
+      #     value: /sdf/home/y/ytl
+      #   volumeMounts:
+      #   - name: init
+      #     mountPath: /out
+      #   - name: init-passwd
+      #     mountPath: /in/passwd
+      #     subPath: passwd
       containers:
       - name: coact-ui
         image: slaclab/coact-ui:latest
-        #command: [ "bash", "-c", "sleep infinity" ]
+        # command: [ "bash", "-c", "sleep infinity" ]
         command: [ "npm", "start", "--host=0.0.0.0" ]
-        #command: [ "npm", "run", "dev" ]
         env:
         - name: REACT_APP_COACT_GRAPHQL_URI
           value: https://coact-dev.slac.stanford.edu/graphql
         - name: WDS_SOCKET_PORT
           value: '443'
+        - name: HTTPS_PROXY
+          value: http://sdfproxy.sdf.slac.stanford.edu:3128
+        - name: HTTP_PROXY
+          value: http://sdfproxy.sdf.slac.stanford.edu:3128
         volumeMounts:
-        - name: code
-          mountPath: /app/src/
-          subPath: src
-        - name: code
-          mountPath: /app/public/
-          subPath: public
+        # - name: init
+        #   mountPath: /etc/passwd
+        #   subPath: passwd
+        # # - name: code
+        #   mountPath: /app/src/
+        #   subPath: src
+        # - name: code
+        #   mountPath: /app/public/
+        #   subPath: public
+#        - name: sdf-home
+#          mountPath: /app
+#          subPath: y/ytl/k8s/coact/coact-ui
+        # - name: sdf-home
+        #   mountPath: /app/src/
+        #   subPath: y/ytl/k8s/coact/coact-ui/src
+        # - name: sdf-home
+        #   mountPath: /app/public/
+        #   subPath: y/ytl/k8s/coact/coact-ui/public      
       volumes:
-      - name: code
-        persistentVolumeClaim:
-          claimName: coact-ui-code
+      # - name: code
+      #   persistentVolumeClaim:
+      #     claimName: coact-ui-code
+#      - name: sdf-home
+#        persistentVolumeClaim:
+#          claimName: sdf-home
+      # - name: init
+      #   emptyDir: {}
+      # - name: init-passwd
+      #   configMap:
+      #     name: passwd
+      #     items:
+      #     - key: passwd
+      #       path: passwd
+        

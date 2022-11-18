@@ -129,15 +129,17 @@ spec:
         - name: init
           mountPath: /etc/passwd
           subPath: passwd
+        # - name: terminfo
+        #   mountPath: /usr/share/terminfo
         - name: sdf-home
           mountPath: /config
           subPath: y/ytl/
         - name: sdf-home
           mountPath: /sdf/home
-        - name: coact-ui-code
-          mountPath: /workspace/coact-ui/
-        - name: coact-api-code
-          mountPath: /workspace/coact-api/
+        # - name: coact-ui-code
+        #   mountPath: /workspace/coact-ui/
+        # - name: coact-api-code
+        #   mountPath: /workspace/coact-api/
       volumes:
       - name: sdf-home
         persistentVolumeClaim:
@@ -150,10 +152,14 @@ spec:
           items:
           - key: passwd
             path: passwd
-      - name: coact-ui-code
-        persistentVolumeClaim:
-          claimName: coact-ui-code
-      - name: coact-api-code
-        persistentVolumeClaim:
-          claimName: coact-api-code
+      # - name: coact-ui-code
+      #   persistentVolumeClaim:
+      #     claimName: coact-ui-code
+      # - name: coact-api-code
+      #   persistentVolumeClaim:
+      #     claimName: coact-api-code
+      # - name: terminfo
+      #   hostPath:
+      #     path: /usr/share/terminfo
+      #     type: Directory
 

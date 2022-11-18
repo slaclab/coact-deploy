@@ -1,17 +1,5 @@
+namespace: dev
 
 resources:
-- code-pvc.yaml
 - deployment.yaml
 - endpoints.yaml
-- code-server.yaml
-
-#secretGenerator:
-#- name: code-server
-#  literals:
-#  - config=|
-#      bind-addr: 0.0.0.0:8080
-#      auth: password
-#      password: letmein
-#      cert: false
-
-

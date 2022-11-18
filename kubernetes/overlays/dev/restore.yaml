@@ -1,0 +1,66 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restore
+  template:
+    metadata:
+      labels:
+        app: restore
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:bionic
+        command: [ "bash", "-c", "sleep infinity" ]
+        env:
+        - name: MONGODB_URL
+          value: mongodb://mongo-rs0-0.mongo-rs0:27017,mongo-rs0-1.mongo-rs0:27017,mongo-rs0.mongo-rs0:27017/?replicationSet=rs0
+        - name: MONGODB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo
+              key: COACT_USER
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo
+              key: COACT_PASSWORD
+        volumeMounts:
+        - mountPath: /sdf/home
+          readOnly: true
+          name: sdf-home
+        # - name: postgres
+        #   image: postgres:14.4-bullseye
+        #   command:  [ "bash", "-c", "sleep infinity" ]
+        #   volumeMounts:
+        #   - mountPath: /source
+        #     name: source
+      - name: coact
+        image: slaclab/coact:latest
+        command: [ "bash", "-c", "sleep infinity" ]
+        volumeMounts:
+        - mountPath: /sdf/home
+          readOnly: true
+          name: sdf-home
+      - name: curl
+        image: curlimages/curl
+        command:  [ "sh", "-c", "while [ 1 ]; do sleep 60; done" ]
+      - name: scp
+        image: kroniak/ssh-client
+        command:  [ "bash", "-c", "sleep infinity" ]
+        volumeMounts:
+        - mountPath: /sdf/home
+          readOnly: true
+          name: sdf-home
+      volumes:
+      - name: sdf-home
+        persistentVolumeClaim:
+          claimName: sdf-home
+
+
